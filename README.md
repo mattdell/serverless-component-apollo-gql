@@ -1,30 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Serverless Component + Apollo + GraphQL problem reproduction
 
-## Getting Started
+## Getting started
 
-First, run the development server:
+Install dependencies
 
-```bash
-npm run dev
-# or
-yarn dev
+```
+yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Apologies for there being so many dependencies. I took these from the current package.json I have and it would have taken hours to strip them down.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Start
 
-## Learn More
+```
+yarn start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Go to http://localhost:3000/hello
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You should see the text
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+Result: {"sayHello":"Hello John Doe"}
+```
 
-## Deploy on Vercel
+If you inspect the XHR requests in the browser you will see the response text is
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+{"errors":[{"message":"PersistedQueryNotFound","extensions":{"code":"PERSISTED_QUERY_NOT_FOUND","exception":{"stacktrace":["PersistedQueryNotFoundError: PersistedQueryNotFound","    at Object.<anonymous> (/Users/mdell/Work/Repos/next-component-apollo/node_modules/apollo-server-core/dist/requestPipeline.js:66:52)","    at Generator.next (<anonymous>)","    at fulfilled (/Users/mdell/Work/Repos/next-component-apollo/node_modules/apollo-server-core/dist/requestPipeline.js:5:58)"]}}}]}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+
+This is fine. This is just how persisted queries work. The next XHR request is the correct response
+
+```
+{"data":{"sayHello":"Hello John Doe"}}
+```
+
+Deploy
+
+```
+env DOMAIN={your domain} SUBDOMAIN={your subdomain} npx serverless
+```
+
+Go to https://{your subdomain}.{your domain}/hello
+
+You should see the text
+
+```
+Result:
+```
+
+If you inspect the XHR requests in the browser you will see the response text is
+
+```
+H4sIAAAAAAAAA6tWSi0qyi8qVrKKrlbKTS0uTkxPVbJSCkgtKs4sLklNCSxNLar0yy9xyy/NS1HSUUqtKEnNK87MzwPqqFZKzk8Bq3YNCvYMDnF1iQ8MdQ2KjPfzD4l38w/1c1GqrY2t5QIA0Ck+i2QAAAA=
+```

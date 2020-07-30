@@ -1,0 +1,13 @@
+myNextApp:
+  component: "@sls-next/serverless-component@1.15.1"
+  inputs:
+    domain:
+      - ${env.SUBDOMAIN}
+      - ${env.DOMAIN}
+    memory:
+      defaultLambda: 1024
+      apiLambda: 2048
+    runtime: "nodejs10.x"
+  cloudfront:
+    api:
+      ttl: 300
